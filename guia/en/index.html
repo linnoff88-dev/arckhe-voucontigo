@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Vou Contigo — the trusted family companion platform</title>
+<meta content="Vou Contigo v2.0.0 — Automation: a companion service for older adults with a WhatsApp bot (Evolution API), family portal, PIX payments through Asaas, automatic reminders and reports, and a Telegram bot for management." name="description"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;800&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;600&amp;display=swap" rel="stylesheet"/>
+<style>
+  :root{
+    --bg:#0c0c10; --bg2:#14141b; --card:#16161e; --line:#272730;
+    --txt:#e9e9ee; --mut:#9a9aa6; --amb:#E2A23B; --amb2:#f0c070; --sky:#38bdf8; --pro:#cbd5e1;
+    color-scheme:dark;
+  }
+  body.light{
+    --bg:#f6f7f9; --bg2:#eceef2; --card:#ffffff; --line:#e1e3ea;
+    --txt:#1a1a22; --mut:#5b5b68; --amb:#b9791d; --amb2:#a16207; --sky:#0369a1; --pro:#b45309;
+    color-scheme:light;
+  }
+  body.light .hero .glow{opacity:.5}
+  body.light pre{background:#0e0e14;color:#d6d6e0}
+  body.light pre .c{color:#8a8a98}
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--txt);font:16px/1.65 Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  h1,h2,h3{font-family:Sora,sans-serif;line-height:1.15;margin:0}
+  a{color:var(--amb);text-decoration:none}
+  code,pre{font-family:"JetBrains Mono",monospace}
+  .wrap{max-width:1160px;margin:0 auto;padding:0 22px}
+  .mut{color:var(--mut)} .amb{color:var(--amb)}
+  .chip{display:inline-block;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--amb);font-weight:600;font-family:Sora}
+  nav{position:sticky;top:0;z-index:30;backdrop-filter:blur(12px);background:rgba(12,12,16,.78);border-bottom:1px solid var(--line)}
+  nav .wrap{display:flex;align-items:center;gap:22px;height:60px}
+  nav .brand{display:flex;align-items:center;gap:8px;font-family:Sora;font-weight:800;letter-spacing:-.02em;color:var(--amb)}
+  nav .brand .emoji{font-size:1.25rem}
+  nav .sep{color:var(--mut);opacity:.45}
+  nav .inema{color:var(--sky);font-weight:600;font-size:.88rem;font-family:Sora}
+  nav .inema:hover{filter:brightness(1.15)}
+  nav .pro{color:var(--pro);font-weight:600;font-size:.88rem;font-family:Sora}
+  nav .pro:hover{filter:brightness(1.15)}
+  nav .clubpro{display:inline-flex;align-items:center;gap:6px}
+  nav .links{margin-left:auto;display:flex;align-items:center;gap:20px;font-size:.92rem}
+  nav .links a.sec{color:var(--mut)} nav .links a.sec:hover{color:var(--txt)}
+  .tgl{background:var(--bg2);border:1px solid var(--line);color:var(--txt);width:38px;height:38px;border-radius:10px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;font-size:1.05rem}
+  .tgl:hover{border-color:var(--amb)}
+  .btn{display:inline-block;background:var(--amb);color:#1a1206;font-weight:600;padding:.6em 1.05em;border-radius:10px;font-family:Sora}
+  .btn.ghost{background:transparent;color:var(--txt);border:1px solid var(--line)}
+  @media(max-width:760px){nav .links a.sec{display:none}}
+  .hero{position:relative;overflow:hidden;border-bottom:1px solid var(--line)}
+  .hero .glow{position:absolute;inset:-40% -20% auto auto;width:70%;height:600px;background:radial-gradient(closest-side,rgba(226,162,59,.22),transparent 70%);pointer-events:none}
+  .hero .wrap{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center;padding:74px 22px}
+  .hero h1{font-size:clamp(2.2rem,5vw,3.5rem);font-weight:800;letter-spacing:-.025em}
+  .hero p.lead{font-size:1.18rem;color:var(--mut);margin:1.1em 0 1.6em;max-width:34ch}
+  .hero .cta{display:flex;gap:12px;flex-wrap:wrap}
+  .hero figure{margin:0;border-radius:16px;overflow:hidden;border:1px solid var(--line);box-shadow:0 30px 80px -30px #000}
+  .hero figure img{width:100%;display:block}
+  @media(max-width:780px){.hero .wrap{grid-template-columns:1fr;padding:48px 22px}}
+  section{padding:62px 0;border-bottom:1px solid var(--line)}
+  section h2{font-size:clamp(1.5rem,3.4vw,2.1rem);font-weight:800;letter-spacing:-.02em}
+  section .sub{color:var(--mut);margin:.6em 0 2em;max-width:62ch}
+  .grid{display:grid;gap:16px}
+  .g3{grid-template-columns:repeat(3,1fr)} .g4{grid-template-columns:repeat(4,1fr)} .g2{grid-template-columns:repeat(2,1fr)}
+  @media(max-width:820px){.g3,.g4{grid-template-columns:1fr 1fr}}
+  @media(max-width:540px){.g2,.g3,.g4{grid-template-columns:1fr}}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px}
+  .card h3{font-size:1.05rem;margin-bottom:.4em}
+  .card p{color:var(--mut);font-size:.92rem;margin:0}
+  .num{display:inline-flex;width:30px;height:30px;align-items:center;justify-content:center;border-radius:8px;background:rgba(226,162,59,.14);color:var(--amb);font-family:Sora;font-weight:800;font-size:.9rem;margin-bottom:.7em}
+  .flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:10px}
+  .flow span{background:var(--bg2);border:1px solid var(--line);border-radius:999px;padding:.45em .9em;font-size:.85rem;font-family:Sora;font-weight:600}
+  .flow .arr{color:var(--amb);border:none;background:none;padding:0 .1em}
+  pre{background:#0a0a0e;border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow:auto;font-size:.86rem;line-height:1.6;color:#d6d6e0}
+  pre .c{color:#6f6f7c} pre .k{color:var(--amb2)} pre .s{color:#9ece6a}
+  .step{display:grid;grid-template-columns:46px 1fr;gap:16px;margin-bottom:26px}
+  .step .b{width:46px;height:46px;border-radius:12px;background:var(--amb);color:#1a1206;font-family:Sora;font-weight:800;font-size:1.25rem;display:flex;align-items:center;justify-content:center}
+  .step h3{font-size:1.12rem;margin-bottom:.3em}
+  .step p{color:var(--mut);margin:.2em 0 .7em}
+  .ex{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  @media(max-width:680px){.ex{grid-template-columns:1fr}}
+  .ex figure{margin:0;border-radius:14px;overflow:hidden;border:1px solid var(--line)}
+  .ex figure img{width:100%;display:block}
+  .ex figcaption{padding:12px 14px;font-size:.88rem;color:var(--mut);background:var(--card)}
+  .phase{display:flex;gap:14px;padding:16px 0;border-bottom:1px solid var(--line)}
+  .phase:last-child{border:none}
+  .phase .tag{flex:0 0 92px;font-family:Sora;font-weight:800;color:var(--amb)}
+  .phase .d strong{display:block;margin-bottom:.2em}
+  .phase .d span{color:var(--mut);font-size:.92rem}
+  footer{padding:46px 0;text-align:center;color:var(--mut);font-size:.9rem}
+  .pill{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:.3em .8em;font-size:.78rem;color:var(--mut);margin:0 4px}
+  table.cmd{width:100%;border-collapse:collapse;font-size:.92rem}
+  table.cmd th,table.cmd td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  table.cmd th{font-family:Sora;font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;color:var(--mut)}
+  table.cmd td code{color:var(--amb);font-size:.88rem}
+  .tablewrap{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:14px}
+</style>
+<link href="https://inematds.github.io/voucontigo/guia/" hreflang="pt-BR" rel="alternate"/><link href="https://inematds.github.io/voucontigo/guia/en/" hreflang="en" rel="alternate"/><link href="https://inematds.github.io/voucontigo/guia/es/" hreflang="es" rel="alternate"/></head>
+<body><div class="inema-lang" style="position:fixed;right:14px;bottom:14px;z-index:9999;display:flex;gap:2px;padding:4px;border-radius:10px;background:rgba(12,12,16,.82);border:1px solid rgba(226,162,59,.45);font:600 12px/1 Sora,Inter,system-ui,sans-serif;backdrop-filter:blur(8px)" translate="no"><a href="../" hreflang="pt-BR" style="padding:6px 8px;border-radius:7px;text-decoration:none;color:#e9e9ee">PT</a><a href="./" hreflang="en" style="padding:6px 8px;border-radius:7px;text-decoration:none;color:#1a1206;background:#E2A23B">EN</a><a href="../es/" hreflang="es" style="padding:6px 8px;border-radius:7px;text-decoration:none;color:#e9e9ee">ES</a></div>
+<nav><div class="wrap">
+<a class="brand" href="#top"><span class="emoji">💚</span> Vou Contigo</a>
+<span class="sep">|</span>
+<span class="clubpro">
+<a class="inema" href="https://inema.club" rel="noopener" target="_blank">INEMA.CLUB</a>
+<span class="sep">-</span>
+<a class="pro" href="https://inema.pro" rel="noopener" target="_blank">PRO</a>
+</span>
+<div class="links">
+<a class="sec" href="#oque">What it is</a>
+<a class="sec" href="#familiar">The family member</a>
+<a class="sec" href="#gestao">Management</a>
+<a class="sec" href="#guia">Install</a>
+<a class="sec" href="#evolution">Evolution</a>
+<a class="sec" href="#telegram">Telegram</a>
+<a class="sec" href="#roadmap">Roadmap</a>
+<button aria-label="Toggle theme" class="tgl" id="themeToggle" title="Toggle theme">🌙</button>
+<a class="btn" href="https://github.com/inematds/voucontigo" rel="noopener" target="_blank">GitHub</a>
+</div>
+</div></nav>
+<header class="hero" id="top">
+<div class="glow"></div>
+<div class="wrap">
+<div>
+<span class="chip">v2.0.0 — Automation</span>
+<h1>When the family can’t be there, <span class="amb">we are</span>.</h1>
+<p class="lead">Vou Contigo accompanies older adults to appointments, exams, the market, the bank, the pharmacy, and outings—and keeps the family informed about everything. In v2, WhatsApp itself schedules and cancels appointments, shows available times, and sends reminders automatically; PIX payments switch to Asaas, and family members get a web portal.</p>
+<div class="cta">
+<a class="btn" href="#guia">Start the guide</a>
+<a class="btn ghost" href="https://github.com/inematds/voucontigo" rel="noopener" target="_blank">View on GitHub</a>
+</div>
+</div>
+<figure><img alt="Vou Contigo logo — two abstract figures side by side, in olive green and beige" src="../assets/logo.jpg"/></figure>
+</div>
+</header>
+<section id="oque"><div class="wrap">
+<span class="chip">What it is</span>
+<h2>A digital notebook that gets the business out of scattered WhatsApp chats—without taking WhatsApp away from the client</h2>
+<p class="sub">The service is sold to children and family members who can’t be there in person. The platform organizes who will be accompanied, when, by whom, and what it actually cost, then provides the day’s report, ready to paste into the family’s WhatsApp chat.</p>
+<div class="grid g3">
+<div class="card"><h3>🗓️ A real schedule</h3><p>Each service includes the client, person accompanied, type, starting address and destination, time, and a clear status flow: requested → scheduled → confirmed → in progress → completed → reported.</p></div>
+<div class="card"><h3>📊 Pricing validated with data</h3><p>When a service is completed, the system requires the actual time, wait time in minutes, distance traveled in km, parking, tolls, and effort level. After 10 to 20 services, you can review the price based on real data.</p></div>
+<div class="card"><h3>💬 Report the family can read</h3><p>The report is generated using the brand’s template. In v2, it is <strong>sent on its own</strong> to the family member as soon as the companion finishes—by WhatsApp and, when an email address is on file, by email too.</p></div>
+<div class="card"><h3>🤖 WhatsApp that replies</h3><p>A numeric-menu bot schedules and cancels appointments, shows available times, and reports balances through the Evolution API, using the company’s regular number connected by QR code. When someone asks for a person—or writes something outside the menu—the bot goes quiet until management allows it to respond.</p></div>
+<div class="card"><h3>💳 Reconciled billing</h3><p>A package becomes a PIX charge in Asaas, with a QR code and copy-and-paste code. The webhook automatically marks it as paid, and the new package is created only when the money comes in.</p></div>
+<div class="card"><h3>🔐 Family member portal</h3><p>Login via magic link in email: balance, upcoming visits, report history on a printable page, request and cancel a visit, and the .ics calendar.</p></div>
+</div>
+</div></section>
+<section id="paraquem"><div class="wrap">
+<span class="chip">Who it’s for</span>
+<h2>Three people, three places in the system</h2>
+<p class="sub">The person receiving care doesn’t need an app, login, or phone — just a well-maintained record. The family uses the platform through WhatsApp, the caregiver through a phone, and the manager through the dashboard and Telegram.</p>
+<div class="grid g3">
+<div class="card"><h3>👨‍👩‍👧 Family / payer</h3><p>Child, grandchild, or responsible party. They request through the landing page or WhatsApp, receive confirmation, a reminder, and the report for each visit. In the MVP, everything happens through WhatsApp, with a person on the other end.</p></div>
+<div class="card"><h3>🚶‍♀️ Companion</h3><p>The person who carries out the service. Uses the mobile-first dashboard on the go: checks the day’s schedule, taps Start, taps Finish, enters wait time/distance/costs, and reviews the report. Or does the same through the Telegram bot.</p></div>
+<div class="card"><h3>🧭 Manager</h3><p>Manages the schedule, approves requests, sells packages, collects payments, and checks metrics. Gets every lead and schedule change on Telegram in under a minute.</p></div>
+</div>
+</div></section>
+<section id="fluxo"><div class="wrap">
+<span class="chip">How it works</span>
+<h2>A service is the system’s basic unit</h2>
+<p class="sub">WhatsApp, Telegram, and the dashboard are channels for managing the service—they are not the service itself. This distinction keeps the system from becoming “a chat with a database.”</p>
+<div class="flow">
+<span>Request</span><span class="arr">→</span>
+<span>Appointment</span><span class="arr">→</span>
+<span>Confirmation</span><span class="arr">→</span>
+<span>Execution (start / finish)</span><span class="arr">→</span>
+<span>Report for the family</span><span class="arr">→</span>
+<span>Package hour deduction</span>
+</div>
+<h2 style="margin-top:44px;font-size:1.3rem">What the platform does in the MVP (v1.0.0)</h2>
+<p class="sub">No WhatsApp automation: the client still talks to a human. The system makes sure nothing gets lost.</p>
+<div class="grid g3">
+<div class="card"><h3>🏠 Promotional landing page</h3><p>A mobile-first page in the logo’s color palette: the problem, services, 3 steps, plans, who we are, what <em>no</em> we do, FAQ, and the fixed WhatsApp button with a prefilled message. The short form creates a lead and notifies the manager on Telegram.</p></div>
+<div class="card"><h3>🖥️ Control panel</h3><p>Supabase login with manager and companion roles. Week/day schedule, client and person-being-accompanied records, packages and hour balances, manual PIX payments, leads, settings, and metrics with CSV export.</p></div>
+<div class="card"><h3>⏱️ Execution with metrics</h3><p>Screen designed for use on the go: Start records the actual time, and Finish requires the wait time, mileage, parking, tolls, and effort level from 1 to 5. From that, you get revenue per effective hour, average wait time, and average extra cost.</p></div>
+<div class="card"><h3>📋 Copyable report</h3><p>The report text is prefilled using the brand’s template and the service details. One button copies it to WhatsApp; another marks it as sent—along with templates for confirmations, reminders, low balances, and payment requests.</p></div>
+<div class="card"><h3>🤖 Telegram bot</h3><p>In the private management group: notifies about a new lead, a service created or canceled, “tomorrow there’s X at Y,” a report pending for more than 2 hours, and a low balance. Includes commands to do everything from your phone.</p></div>
+<div class="card"><h3>⏰ Reminder cron</h3><p>A scheduled job calls the route protected by <code>CRON_SECRET</code> and sends the day’s notifications: a reminder the day before, another a few hours ahead, and a notice about a pending report. On the VPS, this is handled by the system cron; on Vercel, by Vercel Cron.</p></div>
+</div>
+<h2 style="margin-top:44px;font-size:1.3rem">What v2.0.0 added</h2>
+<p class="sub">Automation doesn’t replace the person: it takes repetitive work off their hands, like confirming, reminding, collecting payment, and reporting.</p>
+<div class="grid g3">
+<div class="card"><h3>💬 WhatsApp bot</h3><p>Five-option numeric menu through Evolution API. Scheduling offers times that are actually available on the calendar; cancellation applies the policy and reports the fee. Everything is recorded in Postgres RPCs, not in scattered app rules.</p></div>
+<div class="card"><h3>🔔 Automatic notifications</h3><p>Confirmation when the request is approved, a reminder the day before, a reminder two hours before, and the report upon completion — sent directly to the client via WhatsApp and email when available.</p></div>
+<div class="card"><h3>💳 PIX through Asaas</h3><p>Billing with a QR code, an authenticated webhook that reconciles the payment, and a monthly package renewal cron that sends a reminder a few days before the due date.</p></div>
+<div class="card"><h3>🔐 Family member portal</h3><p>Magic link by email, balance, upcoming visits, monthly reports on a printable page, request and cancellation, .ics calendar, and choice to receive available times by email or WhatsApp.</p></div>
+<div class="card"><h3>📥 Inbox and requests</h3><p>The dashboard gained a unified inbox (WhatsApp conversations + leads), a request queue for approval, and a customer timeline showing everything that happened across every channel.</p></div>
+<div class="card"><h3>📍 Radius and policies</h3><p>The destination is geocoded and compared with the base address. The radius is for information only—it alerts the manager but doesn’t block anything. The cancellation fee and wait time beyond the grace period are calculated automatically.</p></div>
+</div>
+</div></section>
+<section id="familiar"><div class="wrap">
+<span class="chip">How the family member uses it</span>
+<h2>Through your usual WhatsApp—or through the portal when you want to see everything</h2>
+<p class="sub">The person receiving care still doesn’t need an app. The person interacting is their son, granddaughter, or caregiver — using the phone the way they already do.</p>
+<div class="grid g2">
+<div class="card">
+<h3>💬 On WhatsApp</h3>
+<p>Numeric menu, no need to type anything:</p>
+<pre><span class="c">Hi, Ana! I’m Vou Contigo’s assistant. How can I help?</span>
+<span class="k">1.</span> Agendar acompanhamento
+<span class="k">2.</span> Cancelar ou remarcar
+<span class="k">3.</span> Ver horários livres
+<span class="k">4.</span> Meu saldo e próxima visita
+<span class="k">5.</span> Falar com uma pessoa</pre>
+<p class="mut" style="font-size:.9rem;margin-top:10px">Three things put the conversation in human mode: choosing <strong>5</strong>, enter free-form text in the menu, and be an unregistered number. Then the bot <strong>stops responding completely</strong> — and even typing “menu” won’t bring it back — until management sends <code>/liberar</code> on Telegram. Once you’re inside a flow (choosing a type, day, or time), an invalid response doesn’t escalate: it just asks for the number again.</p>
+</div>
+<div class="card">
+<h3>🔐 In the portal <code>/minha-conta</code></h3>
+<p>Login via <strong>magic link sent by email</strong> (WhatsApp code is marked “coming soon” on the screen itself). The email must match the one on the client’s record in the dashboard — that’s how the account is linked to the record.</p>
+<p style="margin-top:10px">Inside: hour balance, upcoming visits, report history, details about the person being accompanied, request and cancel a visit, and also:</p>
+<ul class="mut" style="font-size:.92rem;margin:.6em 0 0;padding-left:1.1em">
+<li><code>/minha-conta/horarios</code> — available time slots, with the buttons <em>receive via email</em> e <em>receive via WhatsApp</em>;</li>
+<li><code>/minha-conta/relatorios/[mes]</code> — the month’s reports on a page designed for printing (or saving as a PDF in your browser);</li>
+<li><code>/minha-conta/calendario.ics</code> — downloads upcoming visits to your phone’s calendar.</li>
+</ul>
+</div>
+</div>
+<div class="flow" style="margin-top:22px">
+<span>A family member sends “hi”</span><span class="arr">→</span>
+<span>Menu</span><span class="arr">→</span>
+<span>1 · Schedule</span><span class="arr">→</span>
+<span>Pending request</span><span class="arr">→</span>
+<span>Manager approves in Telegram</span><span class="arr">→</span>
+<span>Automatic confirmation</span><span class="arr">→</span>
+<span>D-1 and 2-hour reminder</span><span class="arr">→</span>
+<span>Automatic report</span>
+</div>
+</div></section>
+<section id="gestao"><div class="wrap">
+<span class="chip">How management uses it</span>
+<h2>On your phone via Telegram, on your computer via the dashboard</h2>
+<p class="sub">Nothing happens without a person’s approval: the bot receives the request, and the manager decides. What changed in v2 is that deciding became a single tap on a button.</p>
+<div class="grid g3">
+<div class="card"><h3>✅ Approve with a button</h3><p>Each request arrives in the group with three inline buttons: <strong>✅ approve</strong>, <strong>✏️ edit</strong> e <strong>❌ reject</strong>. Approving immediately triggers the automatic confirmation in the family member’s WhatsApp.</p></div>
+<div class="card"><h3>🗣️ Chat without leaving Telegram</h3><p><code>/conversas</code> shows who is waiting for real people, <code>/responder</code> sends the reply via WhatsApp and <code>/liberar</code> returns the conversation to the bot.</p></div>
+<div class="card"><h3>📊 Summaries</h3><p><code>/resumo</code> provides an operational view of the day and <code>/financeiro</code>, last week’s money. The 7 a.m. cron sends the day’s summary automatically; on Mondays, it includes the financial summary for the completed week.</p></div>
+<div class="card"><h3>📥 <code>/painel/inbox</code></h3><p>Unified inbox: WhatsApp conversations and landing page leads in one place, with each conversation’s history and a button to hand it back to the bot when the issue is resolved.</p></div>
+<div class="card"><h3>📋 <code>/painel/solicitacoes</code></h3><p>The queue of appointments the bot scheduled through WhatsApp that still need approval, so the manager can approve, adjust, or decline them without opening each appointment.</p></div>
+<div class="card"><h3>🧾 Timeline and PIX</h3><p>Each client has a timeline of everything that happened across all channels. In the financial section, the Asaas PIX charge includes a QR code and copy-and-paste code, and is reconciled through the webhook.</p></div>
+</div>
+</div></section>
+<section id="pre"><div class="wrap">
+<span class="chip">Prerequisites</span>
+<h2>What you need to have ready before running it</h2>
+<p class="sub">No custom infrastructure: Node for Next.js, the Supabase CLI for the local database, a Telegram bot, and (for publishing) a Vercel account linked to GitHub.</p>
+<div class="grid g3">
+<div class="card"><h3>Node 20+ and npm</h3><p>The project uses Next.js 15 with App Router, TypeScript, and Tailwind 4.</p><pre><span class="c"># check the version</span>
+<span class="k">node -v</span>
+<span class="k">npm -v</span></pre></div>
+<div class="card"><h3>Local Supabase</h3><p>Postgres, Auth, Storage, and RLS running in Docker through the CLI, with no cloud project needed for development.</p><pre><span class="c"># starts the local stack</span>
+<span class="k">npx supabase start</span></pre></div>
+<div class="card"><h3>Telegram bot</h3><p>A bot just for Vou Contigo, created in <span class="s">@BotFather</span>, and the ID of management’s private group.</p><pre><span class="c"># on Telegram, talk to</span>
+<span class="s">@BotFather</span> <span class="c">→ /newbot</span></pre></div>
+</div>
+</div></section>
+<section id="guia"><div class="wrap">
+<span class="chip">User guide · step by step</span>
+<h2>From cloning the repository to the first family receiving a report</h2>
+<p class="sub">Steps 1 through 6 are the one-time setup. Step 7 is the routine you repeat every day.</p>
+<div class="step"><div class="b">1</div><div>
+<h3>Clone and install</h3>
+<p>Download the repository and install the dependencies.</p>
+<pre><span class="k">git clone</span> <span class="s">https://github.com/inematds/voucontigo.git</span>
+<span class="k">cd</span> voucontigo
+<span class="k">npm install</span></pre>
+</div></div>
+<div class="step"><div class="b">2</div><div>
+<h3>Create the variables file</h3>
+<p>Copy the example to <code>.env.local</code>. It already lists everything the project reads: Supabase, Telegram, cron, and site.</p>
+<pre><span class="k">cp .env.example .env.local</span>
+
+<span class="c"># .env.local — what to fill in</span>
+NEXT_PUBLIC_SUPABASE_URL=       <span class="c"># Supabase &gt; Settings &gt; API</span>
+NEXT_PUBLIC_SUPABASE_ANON_KEY=  <span class="c"># same</span>
+SUPABASE_SERVICE_ROLE_KEY=      <span class="c"># same (never in the client)</span>
+TELEGRAM_BOT_TOKEN=             <span class="c"># @BotFather</span>
+TELEGRAM_WEBHOOK_SECRET=        <span class="c"># make up a long string</span>
+TELEGRAM_CHAT_GESTAO=           <span class="c"># management group ID</span>
+CRON_SECRET=                    <span class="c"># Vercel Cron secret</span>
+NEXT_PUBLIC_SITE_URL=<span class="s">https://voucontigo.inema.club</span>
+NEXT_PUBLIC_WHATSAPP_EMPRESA=<span class="s">5551999999999</span>
+TZ=<span class="s">America/Sao_Paulo</span>       <span class="c"># process time zone</span>
+
+<span class="c"># --- v2 (empty = disabled, nothing breaks) ---</span>
+WHATSAPP_PROVIDER=<span class="s">evolution</span>  <span class="c"># or Meta</span>
+EVOLUTION_API_URL=<span class="s">http://evolution:8080</span>
+EVOLUTION_API_KEY=              <span class="c"># same key as Evolution</span>
+EVOLUTION_INSTANCE=<span class="s">voucontigo</span>
+WHATSAPP_WEBHOOK_TOKEN=         <span class="c"># you make it up; it goes in the webhook query</span>
+ASAAS_API_KEY=                  <span class="c"># start in the sandbox</span>
+ASAAS_WEBHOOK_TOKEN=            <span class="c"># header asaas-access-token</span>
+ASAAS_BASE_URL=<span class="s">https://sandbox.asaas.com/api/v3</span>
+RESEND_API_KEY=                 <span class="c"># optional; empty = no email</span>
+EMAIL_FROM=<span class="s">Vou Contigo &lt;contato@voucontigo.com.br&gt;</span>
+GEOCODER_EMAIL=                 <span class="c"># required by Nominatim policy</span></pre>
+</div></div>
+<div class="step"><div class="b">3</div><div>
+<h3>Start Supabase and apply the schema</h3>
+<p><code>start</code> starts the local Postgres instance and prints the keys; <code>db reset</code> recreates the database by applying the migrations from <code>supabase/migrations</code>. Copy the printed URL and anon key into the <code>.env.local</code>.</p>
+<pre><span class="k">npx supabase start</span>
+<span class="k">npx supabase db reset</span>   <span class="c"># applies migrations + seed</span></pre>
+</div></div>
+<div class="step"><div class="b">4</div><div>
+<h3>Run it and create the manager user</h3>
+<p>Start the development server and open the dashboard. The account is created in Supabase Auth (local Studio at <code>http://localhost:54323</code>, Authentication tab → Add user); a trigger creates the profile with the default role <code>acompanhante</code>, so the first account is promoted to <code>gestora</code> using SQL.</p>
+<pre><span class="k">npm run dev</span>   <span class="c"># http://localhost:3000  ·  dashboard at /painel</span>
+
+<span class="c"># promote the first account to manager (Studio SQL Editor)</span>
+<span class="k">update</span> public.perfil <span class="k">set</span> papel = <span class="s">'gestora'</span>
+  <span class="k">where</span> id = (<span class="k">select</span> id <span class="k">from</span> auth.users <span class="k">where</span> email = <span class="s">'voce@exemplo.com'</span>);</pre>
+<p class="mut" style="font-size:.9rem">In Supabase Cloud, in <strong>Authentication → URL Configuration → Redirect URLs</strong>, register <strong>both</strong> magic link redirects, or the email will return an error: <code>${NEXT_PUBLIC_SITE_URL}/entrar/callback</code> (family member portal) and <code>${NEXT_PUBLIC_SITE_URL}/login/callback</code> (team dashboard).</p>
+</div></div>
+<div class="step"><div class="b">5</div><div>
+<h3>Create the bot and register the webhook</h3>
+<p>In Telegram, call the <code>@BotFather</code>, send <code>/newbot</code>, choose a name and username, and save the token in <code>TELEGRAM_BOT_TOKEN</code>. Add the bot to management’s private group and put the group ID in <code>TELEGRAM_CHAT_GESTAO</code>. Then point the webhook to the project route.</p>
+<pre><span class="c"># registers the webhook at NEXT_PUBLIC_SITE_URL/api/telegram</span>
+<span class="k">npx tsx scripts/telegram-set-webhook.ts</span></pre>
+<p class="mut" style="font-size:.9rem">During development, Telegram needs a public URL—use a tunnel (e.g.: <code>ngrok http 3000</code>) and run the script with <code>NEXT_PUBLIC_SITE_URL</code> pointing to it.</p>
+</div></div>
+<div class="step"><div class="b">6</div><div>
+<h3>Publish—VPS or Vercel</h3>
+<p>Publishing is <code>git push</code>: everything else is handled by the webhook. First, register the same variables as the <code>.env.local</code> on the destination (with the production Supabase keys) and run the Telegram webhook script again with the final URL.</p>
+<pre><span class="k">git add -A</span>
+<span class="k">git commit -m</span> <span class="s">"feat: v2.0.0 do Vou Contigo"</span>
+<span class="k">git push</span>   <span class="c"># automatic deploy · nothing to do in the dashboard</span>
+
+<span class="c"># on the VPS (where Evolution runs) — the host's Caddy handles TLS and proxying</span>
+<span class="k">docker compose -p voucontigo -f docker-compose.vps.yml --env-file .env up -d --build</span>
+<span class="c"># and the jobs become system cron jobs:</span>
+<span class="k">cp deploy/vps-cron.example /etc/cron.d/voucontigo</span></pre>
+<p class="mut" style="font-size:.9rem">Always use <code>-p voucontigo</code>: o <code>deploy/Caddyfile.snippet</code> proxies requests to the containers <code>voucontigo-app-1</code> e <code>voucontigo-evolution-1</code>, whose names depend on this prefix. In the <strong>Vercel</strong>, o <code>vercel.json</code> already includes the three crons in UTC — but the one for <strong>every hour</strong> (“2 hours before” reminder) <strong>requires a Pro plan</strong>; on Hobby, only one cron runs per day, with no guaranteed time. This isn’t a problem on the VPS.</p>
+</div></div>
+<div class="step"><div class="b">7</div><div>
+<h3>The day-to-day routine</h3>
+<p>The full service cycle, from the first contact to the report in the family’s hands.</p>
+<pre><span class="c"># 1. the lead arrives (landing page form or WhatsApp)</span>
+<span class="c">#    → the bot notifies the group; the manager responds on WhatsApp</span>
+<span class="k">/lead</span>                 <span class="c"># lists new leads</span>
+
+<span class="c"># 2. schedule</span>
+<span class="k">/agendar</span>              <span class="c"># step-by-step assistant (or through the dashboard)</span>
+
+<span class="c"># 3. on the day — the companion, using their phone</span>
+<span class="k">/hoje</span>                 <span class="c"># today's schedule, with the IDs</span>
+<span class="k">/iniciar 42</span>           <span class="c"># records the actual start time</span>
+
+<span class="c"># 4. when finished</span>
+<span class="k">/finalizar 42</span>         <span class="c"># asks for wait time, km, parking, tolls, effort</span>
+
+<span class="c"># 5. report</span>
+<span class="k">/relatorio 42</span>         <span class="c"># text ready to copy and paste into the family's WhatsApp</span>
+
+<span class="c"># 6. package balance</span>
+<span class="k">/saldo Maria</span>          <span class="c"># hours used and remaining</span></pre>
+</div></div>
+</div></section>
+<section id="evolution"><div class="wrap">
+<span class="chip">Install Evolution API</span>
+<h2>WhatsApp with the company’s number, connected by QR code</h2>
+<p class="sub">Evolution runs alongside the app on the same Docker network and communicates with WhatsApp through a <strong>regular number</strong> — no Meta verification, no approved templates, and no per-message fees. The official alternative (Meta Cloud API) is still supported in the code with <code>WHATSAPP_PROVIDER=meta</code>.</p>
+<div class="step"><div class="b">1</div><div>
+<h3>Configure and deploy on the VPS</h3>
+<p>The image is pinned in <code>atendai/evolution-api:v2.2.3</code>, with its own Postgres (unrelated to Supabase). It fits in about 400 MB of memory alongside the app.</p>
+<pre><span class="k">cp .env.evolution.example .env.evolution</span>
+<span class="c"># edit: EVOLUTION_SERVER_URL, EVOLUTION_API_KEY (long string), EVOLUTION_DB_PASSWORD</span>
+
+<span class="k">docker compose -p voucontigo -f docker-compose.evolution.yml \
+  --env-file .env.evolution up -d</span></pre>
+</div></div>
+<div class="step"><div class="b">2</div><div>
+<h3>Create the instance and scan the QR code</h3>
+<p>Open <code>https://evolution.inema.club/manager</code> and sign in with the <code>EVOLUTION_API_KEY</code>. Create the instance with the name <strong><code>voucontigo</code></strong> — the same value as <code>EVOLUTION_INSTANCE</code> — request the QR Code and scan it with <strong>phone for the Vou Contigo number</strong> (WhatsApp → Linked Devices). The session stays in the volume <code>evolution_instances</code> and survives restarts.</p>
+</div></div>
+<div class="step"><div class="b">3</div><div>
+<h3>Configure the instance webhook</h3>
+<p>The global webhook is deliberately turned off: it’s registered <strong>on the instance</strong>, through the manager.</p>
+<div class="tablewrap">
+<table class="cmd">
+<thead><tr><th>Field</th><th>Value</th></tr></thead>
+<tbody>
+<tr><td>URL</td><td><code>https://voucontigo.inema.club/api/whatsapp?token=&lt;WHATSAPP_WEBHOOK_TOKEN&gt;</code></td></tr>
+<tr><td>Events</td><td><code>MESSAGES_UPSERT</code> e <code>MESSAGES_UPDATE</code></td></tr>
+<tr><td><code>webhook_by_events</code></td><td><strong>false</strong> — all events at the same URL</td></tr>
+<tr><td><code>webhook_base64</code></td><td><strong>false</strong> — no base64 media</td></tr>
+</tbody>
+</table>
+</div>
+<p class="mut" style="font-size:.9rem;margin-top:12px">Evolution doesn’t sign the request body, so the secret is sent in the query string: the same <code>WHATSAPP_WEBHOOK_TOKEN</code> needs to be in the <code>.env</code> from the app, which compares it in constant time and returns 401 if there’s no match. Group messages, messages sent by the number itself, and messages without text are ignored with a 200 response, and the message ID ensures nothing is processed twice.</p>
+</div></div>
+<div class="step"><div class="b">4</div><div>
+<h3>Point the app to it</h3>
+<p>Both stacks share the Docker network, so the app communicates with Evolution by service name without going through the internet.</p>
+<pre>WHATSAPP_PROVIDER=<span class="s">evolution</span>
+EVOLUTION_API_URL=<span class="s">http://evolution:8080</span>
+EVOLUTION_API_KEY=<span class="c"># the SAME AUTHENTICATION_API_KEY from Evolution</span>
+EVOLUTION_INSTANCE=<span class="s">voucontigo</span>
+WHATSAPP_WEBHOOK_TOKEN=<span class="c"># same as the webhook URL</span></pre>
+</div></div>
+<div class="card" style="margin-top:8px"><h3>⚠️ A regular phone number is risky</h3><p>It isn’t the official API: Meta may block the number if the behavior looks like spam. Usage rules—reply only to conversations initiated by the client; send <strong>only messages about real appointments</strong> (confirmation, reminder, report, billing for what was contracted); no bulk messaging, broadcast lists, or marketing; keep a backup number. If volume grows, migrate to <code>WHATSAPP_PROVIDER=meta</code>.</p></div>
+</div></section>
+<section id="asaas"><div class="wrap">
+<span class="chip">PIX billing</span>
+<h2>Asaas: generate, send, and reconcile automatically</h2>
+<p class="sub">The hours package becomes a PIX charge with a QR Code and copy-and-paste code. When the client pays, the Asaas webhook marks it as paid and the new package is created—never before.</p>
+<div class="grid g2">
+<div class="card">
+<h3>1 · Start in the sandbox</h3>
+<p>Create an account, generate an API key for the test environment, and point the base URL to the sandbox. Switch to production only after a complete charge works.</p>
+<pre>ASAAS_API_KEY=<span class="c"># sandbox key</span>
+ASAAS_BASE_URL=<span class="s">https://sandbox.asaas.com/api/v3</span>
+ASAAS_WEBHOOK_TOKEN=<span class="c"># long string you make up</span></pre>
+</div>
+<div class="card">
+<h3>2 · Register the webhook</h3>
+<p>In Asaas, point to the app route and set the authentication token—it arrives in the header <code>asaas-access-token</code> and is compared with <code>ASAAS_WEBHOOK_TOKEN</code> (401 if they don't match).</p>
+<pre><span class="s">https://voucontigo.inema.club/api/asaas/webhook</span>
+<span class="c"># header: asaas-access-token: &lt;ASAAS_WEBHOOK_TOKEN&gt;</span></pre>
+<p class="mut" style="font-size:.9rem">Events that matter: <code>PAYMENT_RECEIVED</code> e <code>PAYMENT_CONFIRMED</code> mark as paid; <code>PAYMENT_DELETED</code> e <code>PAYMENT_REFUNDED</code> are reversed. The route always responds with 200 when authenticated—Asaas blocks the queue for any response that isn’t 2xx—and ignores repeated events.</p>
+</div>
+<div class="card">
+<h3>3 · Monthly renewal</h3>
+<p>The cron <code>/api/cron/renovacoes</code> looks for monthly packages that expire within <code>renovacao_aviso_dias</code> (default 3), generates the renewal charge and sends it to the client. Expired packages become <code>expirado</code>, with a notification to management.</p>
+</div>
+<div class="card">
+<h3>4 · Move to production</h3>
+<p>Switch <code>ASAAS_BASE_URL</code> to <code>https://api.asaas.com/v3</code>, use the production key and register the environment in the configuration <code>asaas_ambiente</code> from the dashboard. The manual PIX option from v1 remains available as an alternative.</p>
+</div>
+</div>
+</div></section>
+<section id="telegram"><div class="wrap">
+<span class="chip">Management bot</span>
+<h2>Telegram commands</h2>
+<p class="sub">Everything the bot does, the dashboard can do too—the bot is the shortcut on your phone. It runs in the manager’s private group with the companion.</p>
+<div class="tablewrap">
+<table class="cmd">
+<thead><tr><th>Command</th><th>What it does</th></tr></thead>
+<tbody>
+<tr><td><code>/hoje</code></td><td>Today’s schedule, with time, person accompanied, type, destination, and status.</td></tr>
+<tr><td><code>/amanha</code></td><td>Tomorrow’s schedule — the basis for the reminder sent the day before.</td></tr>
+<tr><td><code>/semana</code></td><td>A view of the next seven days to see bookings and gaps.</td></tr>
+<tr><td><code>/agendar</code></td><td>Step-by-step assistant: client, person accompanied, type, date and time, starting point, and destination.</td></tr>
+<tr><td><code>/cancelar &lt;id&gt;</code></td><td>Cancels the service and records the reason, applying the cancellation policy.</td></tr>
+<tr><td><code>/iniciar &lt;id&gt;</code></td><td>Marks the actual start time—it’s the companion’s check-in.</td></tr>
+<tr><td><code>/finalizar &lt;id&gt;</code></td><td>Marks the actual end time and asks for wait time, km, parking, tolls, and effort from 1 to 5.</td></tr>
+<tr><td><code>/relatorio &lt;id&gt;</code></td><td>Creates the report using the brand’s template so you can copy and send it to the family.</td></tr>
+<tr><td><code>/saldo &lt;cliente&gt;</code></td><td>Hours purchased, used, and remaining in that client’s package.</td></tr>
+<tr><td><code>/lead</code></td><td>Lists new leads who came in through the landing page, with the WhatsApp link.</td></tr>
+<tr><td colspan="2" style="padding-top:18px;font-family:Sora;font-weight:800;color:var(--amb)">New in v2.0.0</td></tr>
+<tr><td><code>/solicitacoes</code></td><td>Pending requests from WhatsApp, each with buttons <strong>✅ approve</strong>, <strong>✏️ edit</strong> e <strong>❌ reject</strong>. Approving triggers the automatic confirmation to the family member.</td></tr>
+<tr><td><code>/conversas</code></td><td>Whoever is waiting for human support—the conversations where the bot has gone silent.</td></tr>
+<tr><td><code>/responder &lt;whatsapp&gt; &lt;texto&gt;</code></td><td>Sends the reply via WhatsApp without leaving Telegram.</td></tr>
+<tr><td><code>/liberar &lt;whatsapp&gt;</code></td><td>Hands the conversation back to the bot, taking it out of human mode.</td></tr>
+<tr><td><code>/resumo</code></td><td>Today’s operations summary: schedule, pending items, and what has already gone out.</td></tr>
+<tr><td><code>/financeiro</code></td><td>Financial summary for the most recent completed week.</td></tr>
+</tbody>
+</table>
+</div>
+<p class="sub" style="margin-top:22px">In addition to commands, the bot sends automatic alerts for: a new lead, a service created or canceled, a new WhatsApp request, a request for human assistance, a report pending for more than two hours, and a client’s low balance. The 7 a.m. cron sends the day’s summary; on Mondays, it includes the week’s financial summary.</p>
+</div></section>
+<section id="env"><div class="wrap">
+<span class="chip">Environment variables</span>
+<h2>What to fill in, and what happens if you leave it blank</h2>
+<p class="sub">All of them are in <code>.env.example</code>. The v2 ones follow the “empty = disabled” rule: the app starts up the same way, just without that automation.</p>
+<div class="tablewrap">
+<table class="cmd">
+<thead><tr><th>Variable</th><th>Where it comes from · what it does</th></tr></thead>
+<tbody>
+<tr><td><code>NEXT_PUBLIC_SUPABASE_URL</code><br/><code>NEXT_PUBLIC_SUPABASE_ANON_KEY</code><br/><code>SUPABASE_SERVICE_ROLE_KEY</code></td><td>Supabase → Settings → API. The service role <strong>never</strong> goes to the customer.</td></tr>
+<tr><td><code>TELEGRAM_BOT_TOKEN</code><br/><code>TELEGRAM_WEBHOOK_SECRET</code><br/><code>TELEGRAM_CHAT_GESTAO</code></td><td>Token for <code>@BotFather</code>, a secret you make up, and the ID of management’s private group.</td></tr>
+<tr><td><code>CRON_SECRET</code></td><td>Secret that the cron sends as <code>Authorization: Bearer …</code>. Without it, job routes respond with 401.</td></tr>
+<tr><td><code>NEXT_PUBLIC_SITE_URL</code><br/><code>NEXT_PUBLIC_WHATSAPP_EMPRESA</code></td><td>The public URL of the site and the company’s number in the format <code>55DDDNÚMERO</code>.</td></tr>
+<tr><td><code>TZ</code></td><td><code>America/Sao_Paulo</code>. Process time zone — set it in the project variables in Vercel too.</td></tr>
+<tr><td><code>WHATSAPP_PROVIDER</code></td><td><code>evolution</code> (default) or <code>meta</code>.</td></tr>
+<tr><td><code>EVOLUTION_API_URL</code><br/><code>EVOLUTION_API_KEY</code><br/><code>EVOLUTION_INSTANCE</code></td><td>Internal address, the same key as Evolution, and the name of the instance created in the manager.</td></tr>
+<tr><td><code>WHATSAPP_WEBHOOK_TOKEN</code></td><td>Incoming webhook secret; it goes in the query string because Evolution doesn’t sign the body.</td></tr>
+<tr><td><code>ASAAS_API_KEY</code><br/><code>ASAAS_WEBHOOK_TOKEN</code><br/><code>ASAAS_BASE_URL</code></td><td>Asaas. Leave blank = no automatic billing; the v1 manual PIX flow remains.</td></tr>
+<tr><td><code>RESEND_API_KEY</code><br/><code>EMAIL_FROM</code></td><td>Resend via REST. Blank = no email (everything goes out through WhatsApp only); the sender domain must be verified.</td></tr>
+<tr><td><code>GEOCODER_PROVIDER</code><br/><code>GEOCODING_URL</code><br/><code>GEOCODER_EMAIL</code></td><td>Nominatim from OpenStreetMap, whose usage policy <strong>requires</strong> a contact email. Empty = radius never verified.</td></tr>
+</tbody>
+</table>
+</div>
+<p class="sub" style="margin-top:22px">What’s still missing is what isn’t a variable, but <strong>configuration in the dashboard</strong>: <code>raio_km</code>, <code>lat_base</code>/<code>lng_base</code>, <code>tolerancia_espera_min</code>, <code>cancelamento_gratis_horas</code>, <code>cancelamento_taxa_percentual</code>, <code>chave_pix</code> e <code>enviar_horarios_semanal</code>. Without the base’s latitude and longitude, the radius is never checked.</p>
+</div></section>
+<section id="limites"><div class="wrap">
+<span class="chip">Limits and responsibility</span>
+<h2>What Vou Contigo doesn’t do</h2>
+<p class="sub">This isn’t fine print: it’s a product and legal risk decision, and it’s recorded in the data model itself.</p>
+<div class="grid g2">
+<div class="card"><h3>🚫 No medical care</h3><p>There is no medication administration, nursing, procedures, or clinical care. The system <strong>there are no medication or medical record fields</strong> — just one free-text “declared restrictions” field, with only the minimum necessary information. The landing page intentionally includes a “what we don’t do” section.</p></div>
+<div class="card"><h3>🔒 LGPD built into the schema</h3><p>Older adults’ personal data, addresses, and mobility information are sensitive. Collect only what is necessary, record consent during registration, take photos only with explicit authorization, delete data on request, require login to access the dashboard, and enforce isolation with RLS in Supabase.</p></div>
+</div>
+</div></section>
+<section id="roadmap"><div class="wrap">
+<span class="chip">Roadmap</span>
+<h2>Three versions, one at a time</h2>
+<p class="sub">The MVP exists to run one companion service in an organized way and gather the numbers that validate the price. Only after that comes automation, and only after that comes the network.</p>
+<div class="phase"><div class="tag">v1.0.0 ✅</div><div class="d"><strong>Digital notebook · delivered</strong><span>Landing page that converts visitors to WhatsApp, dashboard with schedule and records, service execution with pricing metrics, copyable report, packages and balances, manual PIX payments, management Telegram bot, and internal reminder cron. WhatsApp is still manual.</span></div></div>
+<div class="phase"><div class="tag">v2.0.0 ✅</div><div class="d"><strong>Automation · delivered</strong><span>WhatsApp bot via <strong>Evolution API</strong> (regular number via QR code) to schedule, cancel, view available times, and check the balance; confirmations, D-1 and 2-hour reminders, and reports are sent automatically; PIX billing through Asaas with a reconciliation webhook and monthly renewal; family member portal with balance, printable history, and calendar; inbox, request queue, and timeline in the dashboard; approval via inline buttons in Telegram.</span></div></div>
+<div class="phase"><div class="tag">v3.0.0</div><div class="d"><strong>Network · next</strong><span>Multiple companions with availability and payment sharing, regional matching and history, a PWA app for companions with check-in, family reviews, AI assistance for writing reports and summarizing history before visits, complete financial management, and a referral program. Before that, finish what was left partial in v2: a WhatsApp code for the portal, a calendar via signed URL, an “I’m on my way” check-in notice, and server-generated PDFs.</span></div></div>
+</div></section>
+<footer>
+<div class="wrap">
+<div class="pill">Next.js 15</div><div class="pill">TypeScript</div><div class="pill">Tailwind 4</div><div class="pill">Supabase</div><div class="pill">grammY</div><div class="pill">Evolution API</div><div class="pill">Asaas</div><div class="pill">Resend</div><div class="pill">Docker + Caddy</div>
+<p style="margin-top:18px">Vou Contigo · complete plan at
+      <a href="https://github.com/inematds/voucontigo/blob/main/PLANO.md">PLANO.md</a> ·
+      <a href="https://github.com/inematds/voucontigo">github.com/inematds/voucontigo</a> ·
+      <a href="https://inema.club">INEMA.CLUB</a></p>
+</div>
+</footer>
+<script>
+  (function(){
+    var KEY='voucontigo-theme';
+    var b=document.body, t=document.getElementById('themeToggle');
+    if(localStorage.getItem(KEY)==='light'){ b.classList.add('light'); t.textContent='☀️'; }
+    t.addEventListener('click',function(){
+      var light=b.classList.toggle('light');
+      t.textContent=light?'☀️':'🌙';
+      localStorage.setItem(KEY, light?'light':'dark');
+    });
+  })();
+</script>
+</body>
+</html>
